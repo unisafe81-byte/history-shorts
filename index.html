@@ -6,15 +6,16 @@
   <title>역사 쇼츠 프롬프트 입력 앱 v1.0</title>
   <style>
     :root {
-      --bg: #f6f7f9;
-      --panel: #ffffff;
-      --text: #1d232b;
-      --muted: #667085;
-      --line: #d9dee7;
-      --accent: #176b5b;
-      --accent-strong: #0f4f43;
-      --warn: #8a4b07;
-      --shadow: 0 8px 24px rgba(26, 33, 44, 0.08);
+      --bg: #000000;
+      --panel: #101214;
+      --panel-soft: #171a1f;
+      --text: #f3f5f7;
+      --muted: #a4adb8;
+      --line: #303640;
+      --accent: #19b394;
+      --accent-strong: #41d7ba;
+      --warn: #f2a94b;
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
     }
 
     * {
@@ -92,7 +93,7 @@
     label {
       display: block;
       margin: 12px 0 6px;
-      color: #303846;
+      color: #d9dee7;
       font-size: 13px;
       font-weight: 650;
     }
@@ -104,7 +105,7 @@
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fff;
+      background: #050607;
       color: var(--text);
       padding: 10px 11px;
       outline: none;
@@ -150,22 +151,22 @@
     }
 
     button.secondary {
-      background: #fff;
+      background: transparent;
       color: var(--accent);
     }
 
     button.secondary:hover {
-      background: #eef7f4;
+      background: #0c211d;
     }
 
     button.warning {
       border-color: #c9852f;
-      background: #fff;
+      background: transparent;
       color: var(--warn);
     }
 
     button.warning:hover {
-      background: #fff5e8;
+      background: #24190a;
     }
 
     .status {
@@ -220,37 +221,30 @@
       margin-top: 6px;
     }
 
-    .link-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .tool-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .tool-link:hover {
-      border-color: var(--accent);
-      color: var(--accent-strong);
-      background: #eef7f4;
-    }
-
     .two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
+    }
+
+    .tool-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .tool-panel textarea {
+      min-height: 180px;
+      font-family: "Consolas", "SFMono-Regular", monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    #editOutput {
+      min-height: 260px;
     }
 
     @media (max-width: 920px) {
@@ -295,24 +289,7 @@
         <p class="group-title">마스터 프롬프트</p>
         <label for="masterFile">프롬프트 TXT 불러오기</label>
         <input id="masterFile" type="file" accept=".txt,text/plain">
-        <p class="hint">배포된 앱에서는 v1.0 TXT를 자동으로 불러옵니다. 필요하면 다른 TXT를 직접 선택할 수 있습니다.</p>
-      </div>
-
-      <div class="group">
-        <p class="group-title">외부 링크</p>
-        <div class="link-grid" aria-label="AI 제작 도구 링크">
-          <a class="tool-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT</a>
-          <a class="tool-link" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Gemini</a>
-          <a class="tool-link" href="https://www.midjourney.com/" target="_blank" rel="noopener noreferrer">Midjourney</a>
-          <a class="tool-link" href="https://runwayml.com/" target="_blank" rel="noopener noreferrer">Runway</a>
-          <a class="tool-link" href="https://klingai.com/" target="_blank" rel="noopener noreferrer">Kling</a>
-          <a class="tool-link" href="https://www.canva.com/" target="_blank" rel="noopener noreferrer">Canva</a>
-        </div>
-        <label for="customLink">사용자 지정 외부 링크</label>
-        <input id="customLink" type="text" placeholder="https://example.com">
-        <div class="actions">
-          <button id="openCustomLink" class="secondary" type="button">링크 열기</button>
-        </div>
+        <p class="hint">배포된 앱에서는 v1.0a TXT를 자동으로 불러옵니다. 필요하면 다른 TXT를 직접 선택할 수 있습니다.</p>
       </div>
 
       <div class="group">
@@ -437,12 +414,26 @@
       <div class="output-wrap">
         <textarea id="output" spellcheck="false" aria-label="완성 프롬프트"></textarea>
       </div>
+
+      <div class="tool-panel" aria-label="영상 편집용 결과 분리">
+        <div class="output-toolbar">
+          <h2>12. 결과값 분리</h2>
+          <div class="actions">
+            <button id="parseResult" type="button">편집용으로 구분</button>
+            <button id="copyEditOutput" class="secondary" type="button">구분 결과 복사</button>
+          </div>
+        </div>
+        <label for="rawResult">AI가 생성한 최종 결과값</label>
+        <textarea id="rawResult" spellcheck="false" placeholder="ChatGPT/Gemini에서 생성된 전체 결과값을 여기에 붙여넣으세요."></textarea>
+        <label for="editOutput">영상 편집용 구분 결과</label>
+        <textarea id="editOutput" spellcheck="false" readonly aria-label="영상 편집용 구분 결과"></textarea>
+      </div>
     </section>
   </main>
 
   <script>
     const storageKey = "history-shorts-prompt-inputs-v1";
-    const bundledPromptFile = "Korean Historical Selfie VLOG Script & Prompt Generator v1.0.txt";
+    const bundledPromptFile = "Korean Historical Selfie VLOG Script & Prompt Generator v1.0a.txt";
     const fields = [
       "hostUploadStatus",
       "hostMode",
@@ -455,12 +446,13 @@
       "textLanguage",
       "promptLanguage",
       "background",
-      "extra",
-      "customLink"
+      "extra"
     ];
 
     const els = Object.fromEntries(fields.map((id) => [id, document.getElementById(id)]));
     const output = document.getElementById("output");
+    const rawResult = document.getElementById("rawResult");
+    const editOutput = document.getElementById("editOutput");
     const statusEl = document.getElementById("status");
     let masterPrompt = "";
 
@@ -698,6 +690,82 @@ Image Prompt, Video Prompt, Negative Prompt는 사용자가 선택한 AI 생성 
       URL.revokeObjectURL(url);
     }
 
+    function normalizeHeading(text) {
+      return text
+        .toLowerCase()
+        .replace(/[#*_`>\-\[\]():：]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function getBucketTitle(heading) {
+      const normalized = normalizeHeading(heading);
+      const bucketRules = [
+        ["전체 대본", ["전체 쇼츠 대본", "full script", "script"]],
+        ["장면별 대사", ["장면별 대사", "dialogue", "dialog"]],
+        ["장면별 상황 설명", ["상황 설명", "scene description", "scene setup"]],
+        ["Image Prompt", ["image prompt", "이미지 프롬프트"]],
+        ["Video Prompt", ["video prompt", "비디오 프롬프트", "영상 프롬프트"]],
+        ["Negative Prompt", ["negative prompt", "네거티브 프롬프트"]],
+        ["자막 문구", ["자막", "caption", "subtitle"]],
+        ["편집 노트", ["편집 노트", "editing note", "edit note", "production note"]],
+        ["제목 후보", ["제목", "title"]],
+        ["썸네일 문구", ["썸네일", "thumbnail"]],
+        ["고정 댓글", ["고정 댓글", "pinned comment"]],
+        ["제작 체크리스트", ["체크리스트", "checklist"]]
+      ];
+
+      const match = bucketRules.find(([, keywords]) =>
+        keywords.some((keyword) => normalized.includes(keyword))
+      );
+      return match ? match[0] : "";
+    }
+
+    function splitResultForEditing(text) {
+      const buckets = {
+        "전체 대본": [],
+        "장면별 대사": [],
+        "장면별 상황 설명": [],
+        "Image Prompt": [],
+        "Video Prompt": [],
+        "Negative Prompt": [],
+        "자막 문구": [],
+        "편집 노트": [],
+        "제목 후보": [],
+        "썸네일 문구": [],
+        "고정 댓글": [],
+        "제작 체크리스트": [],
+        "기타": []
+      };
+
+      let current = "기타";
+      const lines = text.replace(/\r\n/g, "\n").split("\n");
+
+      lines.forEach((line) => {
+        const headingBucket = getBucketTitle(line);
+        const looksLikeHeading = /^#{1,4}\s+/.test(line)
+          || /^\s*(\d+[\.)]|[-*])\s+/.test(line)
+          || /[:：]\s*$/.test(line);
+
+        if (headingBucket && looksLikeHeading) {
+          current = headingBucket;
+          buckets[current].push(line.trim());
+          return;
+        }
+
+        if (line.trim()) {
+          buckets[current].push(line);
+        }
+      });
+
+      return Object.entries(buckets)
+        .map(([title, items]) => {
+          const body = items.join("\n").trim();
+          return `## ${title}\n${body || "[분리된 내용 없음]"}`;
+        })
+        .join("\n\n---\n\n");
+    }
+
     document.getElementById("masterFile").addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (!file) return;
@@ -749,15 +817,22 @@ Image Prompt, Video Prompt, Negative Prompt는 사용자가 선택한 AI 생성 
       showStatus("완성 프롬프트 TXT를 저장했습니다.");
     });
 
-    document.getElementById("openCustomLink").addEventListener("click", () => {
-      const rawUrl = els.customLink.value.trim();
-      if (!rawUrl) {
-        showStatus("열 외부 링크를 입력해주세요.");
+    document.getElementById("parseResult").addEventListener("click", () => {
+      const text = rawResult.value.trim();
+      if (!text) {
+        showStatus("분리할 결과값을 입력해주세요.");
         return;
       }
-      const url = /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
-      window.open(url, "_blank", "noopener,noreferrer");
-      showStatus("외부 링크를 새 탭으로 열었습니다.");
+      editOutput.value = splitResultForEditing(text);
+      showStatus("영상 편집용 결과값을 구분했습니다.");
+    });
+
+    document.getElementById("copyEditOutput").addEventListener("click", () => {
+      if (!editOutput.value.trim()) {
+        showStatus("먼저 결과값을 구분해주세요.");
+        return;
+      }
+      copyText(editOutput.value, "구분 결과를 복사했습니다.");
     });
 
     document.getElementById("resetInputs").addEventListener("click", () => {
@@ -773,8 +848,7 @@ Image Prompt, Video Prompt, Negative Prompt는 사용자가 선택한 AI 생성 
         textLanguage: "A) 한국어",
         promptLanguage: "A) 영어로 출력",
         background: "G) 역사 인물에 가장 잘 맞는 장소를 AI가 선택",
-        extra: "",
-        customLink: ""
+        extra: ""
       };
       setValues(defaults);
       showStatus("입력값을 초기화했습니다.");
