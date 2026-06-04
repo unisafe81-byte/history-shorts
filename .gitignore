@@ -1,1 +1,4 @@
 *.zip
+cloudflared.exe
+*.log
+*.err
